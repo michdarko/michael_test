@@ -29,11 +29,11 @@ explore: dimensions {
 
 }
 
-explore: bookings {
+explore: Bookings {
 
   extends: [dimensions]
   join: vw_fct_bookings {
-    view_label: "bookings"
+    view_label: "Bookings"
     sql_on: ${vw_fct_bookings.space_key} = ${vw_dim_space.spacekey}
       AND ${vw_fct_bookings.customer_key}=${vw_fct_bookings.customer_key};;
     relationship: many_to_one
