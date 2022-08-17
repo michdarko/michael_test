@@ -29,6 +29,27 @@ explore: dimensions {
 
 }
 
+explore: dimensions_1 {
+  extension: required
+  view_name:  vw_fct_employee_attendance
+  from:  vw_fct_employee_attendance
+  # description: "Spaces dimensions joined"
+  # group_label: "Dimensions"
+  view_label: "Status"
+
+  join: vw_dim_status {
+    view_label: "Status"
+    relationship: one_to_many
+    sql_on: ${vw_dim_status.status_key} = ${vw_fct_employee_attendance.statuskey} ;;
+    }
+
+    join: vw_dim_calendar  {
+      view_label:"Calendar"
+      relationship:one_to_many
+      sql_on:${vw_dim_calendar.day_raw} = ${vw_fct_employee_attendance.day_date};;
+    }
+}
+
 explore: Bookings {
 
   extends: [dimensions]
@@ -45,12 +66,9 @@ explore: Bookings {
       AND ${vw_dim_employee.customer_key}=${vw_fct_bookings.customer_key} ;;
   }
 }
+
 explore: Employee{
-  from : vw_fct_employee_attendance
-  view_name:  vw_fct_employee_attendance
-  view_label: ""
-
-
+  extends: [dimensions_1]
   join: vw_dim_employee {
     view_label: "Employee"
     relationship: many_to_one
@@ -68,11 +86,6 @@ explore: Employee{
     relationship: one_to_many
     sql_on: ${vw_dim_location.location_key}= ${vw_fct_employee_attendance.home_location_key}
       AND ${vw_dim_location.customer_key} = ${vw_fct_employee_attendance.customer_key} ;;
-  }
-  join: vw_dim_status {
-    view_label: "Status"
-    relationship: one_to_many
-    sql_on: ${vw_dim_status.status_key} = ${vw_fct_employee_attendance.statuskey} ;;
   }
   join: vw_fct_bookings {
     view_label: "Bookings"
