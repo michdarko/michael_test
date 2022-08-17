@@ -41,7 +41,7 @@ explore: dimensions_1 {
     view_label: "Status"
     relationship: one_to_many
     sql_on: ${vw_dim_status.status_key} = ${vw_fct_employee_attendance.statuskey} ;;
-    }
+  }
 }
 
 explore: Bookings {
@@ -94,3 +94,4 @@ explore: Employee{
       AND ${vw_dim_space.customer_key} = ${vw_fct_bookings.customer_key};;
   }
 }
+
