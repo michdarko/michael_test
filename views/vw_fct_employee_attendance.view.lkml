@@ -42,6 +42,7 @@ view: vw_fct_employee_attendance {
     convert_tz: no
     datatype: date
     sql: ${TABLE}.day ;;
+    hidden: no
   }
 
   dimension: employee_attendance_key {
