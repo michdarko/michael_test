@@ -42,12 +42,6 @@ explore: dimensions_1 {
     relationship: one_to_many
     sql_on: ${vw_dim_status.status_key} = ${vw_fct_employee_attendance.statuskey} ;;
     }
-
-    join: vw_dim_calendar  {
-      view_label:"Calendar"
-      relationship:one_to_many
-      sql_on:${vw_dim_calendar.day_raw} = ${vw_fct_employee_attendance.day_date};;
-    }
 }
 
 explore: Bookings {
