@@ -10,8 +10,8 @@ explore: vw_fct_employee_attendance {
 }
 
 view: vw_fct_employee_attendance {
-  sql_table_name: `rdx-platform.dev_dw_analytics.vw_fct_employee_attendance`
-    ;;
+  sql_table_name: `rdx-platform.dev_dw_analytics.vw_fct_employee_attendance`  ;;
+  fields_hidden_by_default: yes
 
   dimension: booking_count {
     type: number
@@ -26,6 +26,7 @@ view: vw_fct_employee_attendance {
   dimension: customer_key {
     type: number
     sql: ${TABLE}.CustomerKey ;;
+
   }
 
   dimension_group: day {
