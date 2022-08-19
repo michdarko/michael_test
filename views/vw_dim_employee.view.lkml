@@ -11,6 +11,7 @@ explore: vw_dim_employee {
 
 view: vw_dim_employee {
   sql_table_name: `rdx-platform.dev_dw_analytics.vw_dim_employee`
+  fields_hidden_by_default: yes
     ;;
 
   dimension_group: created {
@@ -25,6 +26,7 @@ view: vw_dim_employee {
       year
     ]
     sql: ${TABLE}.CreatedDate ;;
+    hidden: no
   }
 
   dimension_group: curated_loaded {
@@ -68,6 +70,7 @@ view: vw_dim_employee {
   dimension: employee_id {
     type: string
     sql: ${TABLE}.EmployeeId ;;
+    hidden: no
   }
 
   dimension: employee_key {
@@ -78,6 +81,7 @@ view: vw_dim_employee {
   dimension: first_name {
     type: string
     sql: ${TABLE}.FirstName ;;
+    hidden: no
   }
 
   dimension: full_name {
