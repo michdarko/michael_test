@@ -56,6 +56,7 @@ view: vw_fct_bookings {
     ]
     datatype: datetime
     sql: ${TABLE}.CancelledDateTZ ;;
+    group_label: "Timing"
   }
 
   dimension: cancelled_reason {
@@ -81,6 +82,7 @@ view: vw_fct_bookings {
     ]
     datatype: datetime
     sql: ${TABLE}.CheckedOutTimeTZ ;;
+    group_label: "Timing"
   }
 
   dimension_group: chedked_in_time_tz {
@@ -96,6 +98,7 @@ view: vw_fct_bookings {
     ]
     datatype: datetime
     sql: ${TABLE}.ChedkedInTimeTZ ;;
+    group_label: "Timing"
   }
 
   dimension: cost_centre {
@@ -117,6 +120,7 @@ view: vw_fct_bookings {
     ]
     datatype: datetime
     sql: ${TABLE}.CreatedDateTZ ;;
+    group_label: "Timing"
   }
 
   dimension_group: created_date_utc {
@@ -131,6 +135,7 @@ view: vw_fct_bookings {
       year
     ]
     sql: ${TABLE}.CreatedDateUTC ;;
+    group_label: "Timing"
   }
 
   dimension_group: curated_loaded {
