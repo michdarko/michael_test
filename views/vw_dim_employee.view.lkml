@@ -64,6 +64,7 @@ view: vw_dim_employee {
   dimension: email {
     type: string
     sql: ${TABLE}.Email ;;
+    hidden: no
   }
 
   dimension: employee_id {
@@ -101,16 +102,19 @@ view: vw_dim_employee {
   dimension: is_deleted {
     type: yesno
     sql: ${TABLE}.IsDeleted ;;
+    hidden: no
   }
 
   dimension: job_title {
     type: string
     sql: ${TABLE}.JobTitle ;;
+    hidden: no
   }
 
   dimension: last_name {
     type: string
     sql: ${TABLE}.LastName ;;
+    hidden: no
   }
 
   dimension_group: updated {
