@@ -10,9 +10,8 @@ explore: vw_dim_employee {
 }
 
 view: vw_dim_employee {
-  sql_table_name: `rdx-platform.dev_dw_analytics.vw_dim_employee`
+  sql_table_name: `rdx-platform.dev_dw_analytics.vw_dim_employee`;;
   fields_hidden_by_default: yes
-    ;;
 
   dimension_group: created {
     type: time
