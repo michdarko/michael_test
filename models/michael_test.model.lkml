@@ -119,5 +119,10 @@ explore: Organisation {
     sql_on: ${vw_fct_organisations.customer_key}=${vw_dim_employee.employee_key} ;;
 
   }
+  join: vw_fct_bookings{
+    view_label: "Bookings"
+    relationship: many_to_many
+    sql_on: ${vw_fct_organisations.attendees}=${vw_fct_bookings.attendees} ;;
+  }
 
 }
