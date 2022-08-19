@@ -29,7 +29,7 @@ view: vw_fct_employee_attendance {
 
   }
 
-  dimension_group: day {
+  dimension_group: Status {
     type: time
     timeframes: [
       raw,

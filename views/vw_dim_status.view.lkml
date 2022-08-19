@@ -14,7 +14,7 @@ view: vw_dim_status {
     sql:COALESCE( ${TABLE}.StatusName ,'Unknown');;
   }
 
-  measure: count {
+  measure: Count_Status_Type{
     type: count
     drill_fields: [status_name]
   }

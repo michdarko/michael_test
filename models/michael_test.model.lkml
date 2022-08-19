@@ -95,3 +95,29 @@ explore: Employee{
   }
 }
 
+
+explore: Organisation {
+  from : vw_fct_organisations
+  view_name: vw_fct_organisations
+  view_label: "organisation"
+
+
+  join : vw_dim_location {
+    view_label: "Location"
+    relationship: one_to_many
+    sql_on: ${vw_fct_organisations.location_key}= ${vw_dim_location.location_key}
+      AND ${vw_fct_organisations.customer_key} = ${vw_dim_location.customer_key} ;;
+  }
+  join: vw_dim_customer {
+    view_label: "Customer"
+    relationship: many_to_one
+    sql_on: ${vw_fct_organisations.customer_key}=${vw_dim_customer.customer_key} ;;
+  }
+  join:  vw_dim_employee{
+    view_label: "Emoloyee"
+    relationship: one_to_many
+    sql_on: ${vw_fct_organisations.customer_key}=${vw_dim_employee.employee_key} ;;
+
+  }
+
+}
