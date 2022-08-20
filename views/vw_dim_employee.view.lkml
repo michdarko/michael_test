@@ -10,8 +10,7 @@ explore: vw_dim_employee {
 }
 
 view: vw_dim_employee {
-  sql_table_name: `rdx-platform.dev_dw_analytics.vw_dim_employee`;;
-  fields_hidden_by_default: yes
+
 
   dimension_group: created {
     type: time
@@ -25,26 +24,29 @@ view: vw_dim_employee {
       year
     ]
     sql: ${TABLE}.CreatedDate ;;
-    hidden: no
   }
 
   dimension_group: curated_loaded {
+    hidden: yes
     type: time
     timeframes: [
       raw,
-      time,
       date,
       week,
       month,
       quarter,
       year
     ]
+    convert_tz: no
+    datatype: date
     sql: ${TABLE}.CuratedLoaded ;;
   }
 
   dimension: customer_key {
+
     type: number
     sql: ${TABLE}.customerKey ;;
+    hidden: yes
   }
 
   dimension_group: dwloaded {
@@ -59,34 +61,38 @@ view: vw_dim_employee {
       year
     ]
     sql: ${TABLE}.DWLoaded ;;
+    hidden: yes
   }
 
   dimension: email {
     type: string
     sql: ${TABLE}.Email ;;
-    hidden: no
   }
 
   dimension: employee_id {
     type: string
     sql: ${TABLE}.EmployeeId ;;
-    hidden: no
+    hidden: yes
   }
 
   dimension: employee_key {
+    primary_key: yes
     type: number
     sql: ${TABLE}.EmployeeKey ;;
+    hidden: yes
   }
 
   dimension: first_name {
     type: string
     sql: ${TABLE}.FirstName ;;
-    hidden: no
+    case_sensitive: no
   }
 
   dimension: full_name {
     type: string
     sql: ${TABLE}.FullName ;;
+    case_sensitive: no
+
   }
 
   dimension: groups {
@@ -95,6 +101,7 @@ view: vw_dim_employee {
   }
 
   dimension: home_location_key {
+    hidden: yes
     type: number
     sql: ${TABLE}.HomeLocationKey ;;
   }
@@ -102,19 +109,18 @@ view: vw_dim_employee {
   dimension: is_deleted {
     type: yesno
     sql: ${TABLE}.IsDeleted ;;
-    hidden: no
   }
 
   dimension: job_title {
     type: string
     sql: ${TABLE}.JobTitle ;;
-    hidden: no
+    case_sensitive: no
   }
 
   dimension: last_name {
     type: string
     sql: ${TABLE}.LastName ;;
-    hidden: no
+    case_sensitive: no
   }
 
   dimension_group: updated {
@@ -135,6 +141,9 @@ view: vw_dim_employee {
     type: count
     drill_fields: [first_name, full_name, last_name]
   }
+
+
+
 }
 
 view: vw_dim_employee__groups {
@@ -146,6 +155,7 @@ view: vw_dim_employee__groups {
   dimension: group_name {
     type: string
     sql: GroupName ;;
+    case_sensitive: no
   }
 
   dimension: vw_dim_employee__groups {

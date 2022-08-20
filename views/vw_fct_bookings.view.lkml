@@ -18,16 +18,19 @@ view: vw_fct_bookings {
   }
 
   dimension: booked_for_userkey {
+    hidden: yes
     type: number
     sql: ${TABLE}.BookedForUserkey ;;
   }
 
   dimension: booking_id {
+    hidden: yes
     type: string
     sql: ${TABLE}.BookingId ;;
   }
 
   dimension: booking_key {
+    hidden: yes
     primary_key: yes
     type: number
     sql: ${TABLE}.BookingKey ;;
@@ -43,7 +46,7 @@ view: vw_fct_bookings {
     sql: ${TABLE}.BookingType ;;
   }
 
-  dimension_group: cancelled_date_tz {
+  dimension_group: cancelled {
     type: time
     timeframes: [
       raw,
@@ -56,7 +59,6 @@ view: vw_fct_bookings {
     ]
     datatype: datetime
     sql: ${TABLE}.CancelledDateTZ ;;
-    group_label: "Timing"
   }
 
   dimension: cancelled_reason {
@@ -69,7 +71,7 @@ view: vw_fct_bookings {
     sql: ${TABLE}.Capacity ;;
   }
 
-  dimension_group: checked_out_time_tz {
+  dimension_group: checked_out {
     type: time
     timeframes: [
       raw,
@@ -82,10 +84,9 @@ view: vw_fct_bookings {
     ]
     datatype: datetime
     sql: ${TABLE}.CheckedOutTimeTZ ;;
-    group_label: "Timing"
   }
 
-  dimension_group: chedked_in_time_tz {
+  dimension_group: chedked_in {
     type: time
     timeframes: [
       raw,
@@ -98,7 +99,6 @@ view: vw_fct_bookings {
     ]
     datatype: datetime
     sql: ${TABLE}.ChedkedInTimeTZ ;;
-    group_label: "Timing"
   }
 
   dimension: cost_centre {
@@ -106,7 +106,7 @@ view: vw_fct_bookings {
     sql: ${TABLE}.CostCentre ;;
   }
 
-  dimension_group: created_date_tz {
+  dimension_group: created{
     type: time
     timeframes: [
       raw,
@@ -120,10 +120,11 @@ view: vw_fct_bookings {
     ]
     datatype: datetime
     sql: ${TABLE}.CreatedDateTZ ;;
-    group_label: "Timing"
   }
 
   dimension_group: created_date_utc {
+    hidden: yes
+
     type: time
     timeframes: [
       raw,
@@ -135,10 +136,10 @@ view: vw_fct_bookings {
       year
     ]
     sql: ${TABLE}.CreatedDateUTC ;;
-    group_label: "Timing"
   }
 
   dimension_group: curated_loaded {
+    hidden: yes
     type: time
     timeframes: [
       raw,
@@ -159,6 +160,7 @@ view: vw_fct_bookings {
   }
 
   dimension_group: dwloaded {
+    hidden: yes
     type: time
     timeframes: [
       raw,
@@ -172,11 +174,12 @@ view: vw_fct_bookings {
     sql: ${TABLE}.DWLoaded ;;
   }
 
-  dimension_group: end_time_tz {
+  dimension_group: end_time {
     type: time
     timeframes: [
       raw,
       time,
+      hour_of_day,
       date,
       week,
       month,
@@ -196,12 +199,9 @@ view: vw_fct_bookings {
     sql: ${TABLE}.IsCheckedIn ;;
   }
 
-  dimension: rownum {
-    type: number
-    sql: ${TABLE}.ROWNUM ;;
-  }
 
   dimension: space_key {
+    hidden: yes
     type: number
     sql: ${TABLE}.SpaceKey ;;
   }
@@ -211,11 +211,12 @@ view: vw_fct_bookings {
     sql: ${TABLE}.SpaceLabelName ;;
   }
 
-  dimension_group: start_time_tz {
+  dimension_group: start_time {
     type: time
     timeframes: [
       raw,
       time,
+      hour_of_day,
       date,
       week,
       month,
@@ -228,6 +229,7 @@ view: vw_fct_bookings {
   }
 
   dimension: timezone_key {
+    hidden: yes
     type: number
     sql: ${TABLE}.TimezoneKey ;;
   }
@@ -245,25 +247,110 @@ view: vw_fct_bookings {
     ]
     sql: ${TABLE}.UpdatedDate ;;
   }
-
-  measure: count {
+  # all bookiings
+  measure: all_booking_count {
     type: count
-    drill_fields: [space_label_name]
+    drill_fields: [vw_dim_employee.full_name,vw_dim_group.group_name,start_time_date,vw_dim_status.status_name,vw_dim_space.space_name]
   }
+
   measure: count_days {
     type : count_distinct
-    sql: ${start_time_tz_date} ;;
+    sql: ${start_time_date} ;;
   }
 
   dimension_group: booking {
     type: duration
-    sql_start:  ${start_time_tz_raw} ;;  # often this is a single database column
-    sql_end:  ${end_time_tz_raw}  ;;  # often this is a single database column
+    sql_start:  ${start_time_raw} ;;  # often this is a single database column
+    sql_end:  ${end_time_raw}  ;;  # often this is a single database column
     intervals: [minute,hour] # valid intervals described below
   }
   measure: booking_duration_mins {
     type: sum
     sql: ${TABLE}.BookingDurationMins ;;
+  }
+  dimension_group: booked_in_advance {
+    type: duration
+    sql_start:  ${created_raw} ;;  # often this is a single database column
+    sql_end:  ${start_time_raw}  ;;  # often this is a single database column
+    intervals: [minute,hour,day] # valid intervals described below
+  }
+
+  measure: booked_in_advance_mins {
+    type: sum
+    sql: ${TABLE}.BookedInAdvanceMins ;;
+  }
+
+
+  dimension_group: cancelled_in_advance {
+    type: duration
+    sql_start:  ${cancelled_raw} ;;  # often this is a single database column
+    sql_end:  ${start_time_raw}  ;;  # often this is a single database column
+    intervals: [minute,hour,day] # valid intervals described below
+  }
+
+  measure: cancelled_in_advance_mins {
+    type: sum
+    sql: ${TABLE}.CancelledInAdvanceMins ;;
+  }
+
+  measure: cancelled_booking_count {
+    type: count
+    filters: [is_cancelled: "yes"]
+    drill_fields: [vw_dim_employee.full_name,vw_dim_group.group_name,start_time_date,vw_dim_status.status_name,vw_dim_space.space_name]
+  }
+
+  measure: booking_count {
+    type: count
+    filters: [is_cancelled: "no"]
+    drill_fields: [vw_dim_employee.full_name,vw_dim_group.group_name,start_time_date,vw_dim_status.status_name,vw_dim_space.space_name]
+  }
+
+  measure: checked_in_booking_count {
+    type: count
+    filters: [is_checked_in: "yes"]
+    drill_fields: [vw_dim_employee.full_name,vw_dim_group.group_name,start_time_date,vw_dim_status.status_name,vw_dim_space.space_name]
+  }
+
+  measure:checked_in_rate {
+    type: number
+    sql: ${vw_fct_bookings.checked_in_booking_count} / ${vw_fct_bookings.booking_count} ;;
+    value_format: "0\%"
+  }
+  measure:cancellation_rate {
+    type: number
+    sql: ${vw_fct_bookings.cancelled_booking_count} / ${vw_fct_bookings.all_booking_count} ;;
+    value_format: "0\%"
+  }
+
+  measure: number_of_attendees{
+    type: number
+    sql: ARRAY_LENGTH(${TABLE}.Attendees)  ;;
+  }
+  dimension: booked_in_advance_bucket {
+
+    case: {
+      when: {
+        sql: ${created_date} = ${start_time_date};;
+        label: "On Day"
+      }
+      when: {
+        sql: date_diff(${created_date},${start_time_date},day) = 1;;
+        label: "1 Day"
+      }
+      when: {
+        sql: date_diff(${created_date},${start_time_date},day) <=7;;
+        label: "Up to 7 Days"
+      }
+      when: {
+        sql: date_diff(${created_date},${start_time_date},day) <=14;;
+        label: "Up to 2 weeks"
+      }
+      when: {
+        sql: date_diff(${created_date},${start_time_date},day) <=21;;
+        label: "Up to 3 weeks"
+      }
+      else:"Greater Than 3 Weeks"
+    }
   }
 
 
