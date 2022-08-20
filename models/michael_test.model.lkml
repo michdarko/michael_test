@@ -115,7 +115,7 @@ explore: Organisation {
   }
   join:  vw_dim_employee{
     view_label: "Emoloyee"
-    relationship: one_to_many
+    relationship: many_to_one
     sql_on: ${vw_fct_organisations.customer_key}=${vw_dim_employee.employee_key} ;;
 
   }
