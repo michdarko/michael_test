@@ -121,8 +121,8 @@ explore: Organisation {
   }
   join: vw_fct_bookings{
     view_label: "Bookings"
-    relationship: many_to_one
-    sql_on: ${vw_fct_organisations.attendees}=${vw_fct_bookings.attendees} ;;
+    relationship: one_to_many
+    sql_on: ${vw_fct_organisations.customer_key}=${vw_fct_bookings.customer_key} ;;
   }
 
 }
